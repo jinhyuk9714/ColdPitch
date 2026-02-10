@@ -93,6 +93,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // 5.5 Check scraping quality — warn if content is too thin
+  const mainContentMatch = siteContent.match(/Main Content: ([\s\S]*?)(?=About Page:|$)/);
+  const mainContentLength = mainContentMatch?.[1]?.trim().length ?? 0;
+  const isThinContent = mainContentLength < 200;
+
   // 6. Generate emails
   try {
     const result = await generateEmails(siteContent, myProduct, selectedTone);
@@ -112,12 +117,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(result, {
-      headers: {
-        "X-RateLimit-Remaining": String(remaining),
-        "X-RateLimit-Limit": String(limit),
-      },
-    });
+    return NextResponse.json(
+      { ...result, ...(isThinContent && { warning: "Limited website data was available. Email quality may vary." }) },
+      {
+        headers: {
+          "X-RateLimit-Remaining": String(remaining),
+          "X-RateLimit-Limit": String(limit),
+        },
+      }
+    );
   } catch (error) {
     console.error("[generate error]", error);
     return NextResponse.json(

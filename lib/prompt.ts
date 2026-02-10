@@ -5,139 +5,100 @@ export function buildPrompt(
   myProduct: string,
   tone: Tone
 ): string {
+  // Check if sender provided any numbers/stats
+  const hasStats = /\d/.test(myProduct);
+
   const toneGuide = {
-    casual: `
-      - Write like texting a smart friend you respect
-      - Use "I" and "you", contractions allowed
-      - One short question at the end, no formal CTA`,
-    professional: `
-      - Warm but direct. No corporate fluff
-      - Respect their time — get to the point in sentence 1
-      - End with a low-friction ask (not "schedule a call")`,
-    bold: `
-      - Lead with a provocative observation or contrarian take
-      - Challenge their current approach (respectfully)
-      - Be specific and opinionated`
+    casual: `CASUAL — like a DM, not an email. Fragmented. Informal. Human.
+Contractions required. Short punchy sentences. "Hey —" or "So..." openers OK.
+End with a short question. Never a CTA.
+
+EXAMPLE (match this vibe, don't copy):
+  Subject: your new api
+  Hey — saw you shipped a GraphQL endpoint but the docs still show REST examples only. We auto-gen docs from schema files. One of our users set it up in 10 min. Want me to send a sample?`,
+
+    professional: `PROFESSIONAL — direct, warm, no fluff. First sentence = the point.
+Respectful of their time. Specific, not generic. Ends with a soft ask.
+
+EXAMPLE (match this vibe, don't copy):
+  Subject: failed payments
+  Your subscription tiers went live last month — but failed card retries still hit a generic error page. We auto-retry with smart timing and win back about 1 in 5 failed charges. Happy to show what it'd look like on your stack.`,
+
+    bold: `BOLD — confrontational. Start by pointing out something they're doing wrong.
+No compliments. No softening. Open with a problem, not a feature.
+Pattern: "[Problem statement]. [Why it's costing them]. [What you do about it]. [Short closer]."
+If your email could pass as "professional", it's not bold enough.
+
+EXAMPLE (match this vibe, don't copy):
+  Subject: your pricing is broken
+  Flat pricing across all tiers? That's costing you money. Enterprise customers pay the same as solo devs — you haven't segmented. We build usage-based billing in a day. Blunt, but worth knowing.`
   };
 
-  return `You are a world-class cold email copywriter. You write emails that actually get replies — not emails that get deleted.
+  return `You write cold emails that get replies. Not spam. Not templates. Real emails a human would actually read.
 
-## CONTEXT
-You will analyze a target company's website content, then write 3 cold emails from someone who wants to sell them a product/service.
+## INPUT DATA
 
-## TARGET COMPANY WEBSITE
+### Target company website:
 ${siteContent}
 
-## WHAT THE SENDER IS SELLING
+### Sender's product/service:
 ${myProduct}
 
-## TONE
+### Tone:
 ${toneGuide[tone]}
 
-## CRITICAL RULES
+## INSTRUCTIONS
 
-### Rule 1: SPECIFICITY IS EVERYTHING
-Your email MUST reference at least 2 specific details ONLY findable on their website. Not generic industry observations.
+### Step 1: Extract 3 DIFFERENT aspects from the target website
+Before writing, find:
+- Aspect A: One specific feature, tool, or product they built
+- Aspect B: Who they sell to or how their business works
+- Aspect C: Something they recently changed, a bold claim, or a visible gap
 
-BAD: Any sentence that could apply to 100 other companies.
-GOOD: A sentence that only makes sense if you actually read THIS company's website.
+Put these in "keyPoints". Each email uses ONE different aspect.
 
-The reader should think "wow, they actually looked at our site" — not "this is a mass email."
+### Step 2: Write 3 emails
 
-### Rule 2: BANNED PHRASES
-NEVER use any of these:
-- "I hope this email finds you well"
-- "Would you be open to a quick chat"
-- "Let's schedule a time"
-- "I'd love to connect"
-- "I came across your company"
-- "I was impressed by"
-- "Streamline your [anything]"
-- "Enhance your [anything]"
-- "Revolutionize your [anything]"
-- "Take your [X] to the next level"
-- "In today's fast-paced world"
-- "As a leader in [industry]"
-- "Synergy", "leverage", "optimize", "empower"
-- "Best regards"
-- "I noticed that" as an opening line
-- "Given [company]'s focus on [X]"
-- "Could this be something that"
-- "How do you envision"
-- "I see that [company]" (lazy opener)
-- "ensuring nothing slips through the cracks"
-- "imagine the impact"
+**Email 1 "Observation" (Aspect A, max 80 words):**
+Open directly with the feature itself — NOT with the company name. Never start with "[Company]'s [feature]..." — instead describe what you saw.
+BAD opener: "Basecamp's project pages organize tasks well."
+GOOD opener: "The project page layout puts tasks, docs, and chat in one view."
+Then connect the sender's product in 1-2 sentences.
 
-### Rule 3: LENGTH
-- Observation email: MAX 80 words body
-- Proof email: MAX 100 words body
-- One-liner email: MAX 50 words body
-- Subject lines: MAX 5 words. Lowercase only. No clickbait.
+**Email 2 "Proof" (Aspect B, max 100 words):**
+Lead with something concrete from the sender's product description. Then connect it to a pain point the target's customers probably face.${hasStats ? '' : '\n⚠️ The sender gave NO numbers. Do NOT invent any. Describe the problem qualitatively.'}
 
-### Rule 4: THREE EMAILS, THREE COMPLETELY DIFFERENT ANGLES
-Each email MUST talk about a DIFFERENT part of the target company's website. Never reference the same feature or page twice across the 3 emails.
+**Email 3 "One-liner" (Aspect C, max 40 words):**
+The body has exactly 2 parts: (1) One sharp question about their site. (2) One teaser under 10 words.
+The subject is 2-5 words. The body is the full message. NEVER put the message in the subject.
 
-- Email 1 "Observation": Pick ONE specific feature, product update, or claim from their site. Open with it directly (no preamble). Then in 1-2 sentences, connect YOUR product as a natural complement to that specific thing.
-- Email 2 "Proof": Start with a REAL fact from the sender's product description (user count, use case, etc). Then connect it to a DIFFERENT aspect of the target company — a pain point their users probably face, or a gap in their offering.
-- Email 3 "One-liner": ONE sharp question that highlights a problem the sender's product solves. The question must reference something specific from the target's site. No explanation, no pitch. Just the question + a one-line teaser.
+GOOD: subject: "after the meeting" / body: "Your scheduling handles the booking — but what happens to the notes after? We auto-sync them."
+BAD: subject: (entire message here) / body: "" ← WRONG, body must contain the email text
 
-### Rule 5: SUBJECT LINES
-- Lowercase, 2-5 words
-- Must feel like it's from a colleague
-- Must relate to the specific email content
-- All 3 must be different
-- Never use generic phrases like "quick thought" or "random idea"
+### Step 3: Self-check before outputting
 
-### Rule 6: NATURAL ENDING
-- Never end with a formal CTA paragraph
-- Last line = natural conversation ender
-- Good: "Curious if you've hit this?" / "Worth a look?" / "If I'm off base, ignore me."
-- Bad: "Would you be available for a 15-minute call next Tuesday?"
+Scan each email. If ANY of these appear, rewrite:
+- Words: impressive, excited, streamline, enhance, revolutionize, revolutionary, optimize, empower, leverage, game changer, seamless, ensuring
+- Phrases: "I came across", "I noticed", "I see that", "nothing falls through the cracks", "imagine the impact", "Would you be open to", "Let's schedule", "Let's explore", "I'd love to", "As a leader in", "Best regards", "Looking forward to", "Let me know if", "help teams ship faster", "without the manual hassle"
+- Patterns: opening with "[Company]'s ...", any fabricated number, any CTA asking for a call/meeting
+- Subject line: must be lowercase, 2-5 words, specific. Never "quick thought" or "random idea"
+- Last line: casual. Never formal. Never a CTA.
 
-### Rule 7: NEVER FABRICATE STATS
-ONLY use numbers or results that appear in the SENDER'S PRODUCT DESCRIPTION.
-- Sender said "500+ remote teams" → OK to use
-- Sender said nothing about results → do NOT invent "30% increase" or "10+ hours saved"
-- If no stats available, describe the problem you solve instead
+Also verify: Does each email use a DIFFERENT aspect from keyPoints? If not, fix it.
 
-### Rule 8: GENERATE ORIGINAL CONTENT ONLY
-Every subject line, opening line, and email body must be freshly generated from the actual website content and product description. Do not reuse patterns or phrasings from your training data's cold email templates.
-
-### Rule 9: HANDLE WEAK WEBSITE DATA
-If the website content is vague or lacks specifics:
-- Use whatever concrete details ARE available (product name, tagline, named features, customer quotes)
-- DO NOT invent features or details that aren't in the provided content
-- Focus more on the sender's product and the general problem it solves for companies like the target
-- It's better to write a good email with less specificity than a bad email with fake specificity
-
-## OUTPUT FORMAT
-Return ONLY valid JSON. No markdown, no backticks, no explanation.
+## OUTPUT
+Return ONLY valid JSON. Every "body" MUST contain the full email text (never empty). Subject is always short (2-5 words).
 
 {
   "company": {
-    "name": "exact company name from website",
+    "name": "company name from website",
     "description": "what they do in under 15 words",
-    "keyPoints": ["specific thing 1 from site", "specific thing 2", "specific thing 3"]
+    "keyPoints": ["aspect A", "aspect B", "aspect C"]
   },
   "emails": [
-    {
-      "id": 1,
-      "label": "Observation",
-      "subject": "lowercase 2-5 word subject",
-      "body": "email body here"
-    },
-    {
-      "id": 2,
-      "label": "Proof",
-      "subject": "lowercase 2-5 word subject",
-      "body": "email body here"
-    },
-    {
-      "id": 3,
-      "label": "One-liner",
-      "subject": "lowercase 2-5 word subject",
-      "body": "email body here"
-    }
+    {"id": 1, "label": "Observation", "subject": "short subject", "body": "full email text here"},
+    {"id": 2, "label": "Proof", "subject": "short subject", "body": "full email text here"},
+    {"id": 3, "label": "One-liner", "subject": "short subject", "body": "question + teaser here"}
   ]
 }`;
 }

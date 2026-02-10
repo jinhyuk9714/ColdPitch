@@ -13,6 +13,7 @@ import type { Tone } from "@/lib/prompt";
 export default function Home() {
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastRequest, setLastRequest] = useState<{
     url: string;
@@ -21,7 +22,8 @@ export default function Home() {
   } | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  function handleResult(data: GenerateResult) {
+  function handleResult(data: GenerateResult & { warning?: string }) {
+    setWarning(data.warning ?? "");
     setResult(data);
     setError("");
     setTimeout(
@@ -42,6 +44,7 @@ export default function Home() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
+      setWarning(data.warning ?? "");
       setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Regeneration failed");
@@ -85,6 +88,13 @@ export default function Home() {
           {error && (
             <div className="mt-6 w-full max-w-xl animate-fade-in rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-center text-sm text-red-400">
               {error}
+            </div>
+          )}
+
+          {/* Warning display */}
+          {warning && (
+            <div className="mt-6 w-full max-w-xl animate-fade-in rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-center text-sm text-yellow-400">
+              {warning}
             </div>
           )}
 
