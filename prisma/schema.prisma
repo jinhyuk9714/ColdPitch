@@ -1,0 +1,112 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Auth.js required models
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts      Account[]
+  sessions      Session[]
+  subscription  Subscription?
+  emailHistory  EmailHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Subscription (1:1 with User)
+model Subscription {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  lemonCustomerId        String?
+  lemonSubscriptionId    String?  @unique
+  lemonVariantId         String?
+  status                 String   @default("inactive") // active, cancelled, expired, inactive
+  currentPeriodEnd       DateTime?
+  customerPortalUrl      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Email generation history (N:1 with User)
+model EmailHistory {
+  id                 String   @id @default(cuid())
+  userId             String
+  targetUrl          String
+  myProduct          String
+  tone               String
+  companyName        String
+  companyDescription String
+  result             String   // JSON string of GenerateResult
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+// Rate limiting (DB-based for serverless)
+model UsageLog {
+  id        String   @id @default(cuid())
+  key       String   // userId or IP address
+  date      String   // "YYYY-MM-DD"
+  createdAt DateTime @default(now())
+
+  @@index([key, date])
+}
