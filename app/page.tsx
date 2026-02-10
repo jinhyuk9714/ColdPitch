@@ -65,7 +65,7 @@ export default function Home() {
               <br />
               <span className="text-primary">Get a cold email.</span>
               <br />
-              30 seconds.
+              In seconds.
             </h1>
             <p className="mx-auto mt-6 max-w-lg text-lg text-muted-foreground">
               AI analyzes their website and crafts personalized cold emails

@@ -67,7 +67,7 @@ export default function OGImage() {
             maxWidth: "900px",
           }}
         >
-          Paste a URL. Get a cold email. 30 seconds.
+          Paste a URL. Get a cold email. In seconds.
         </div>
 
         <div
