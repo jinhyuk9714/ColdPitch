@@ -26,7 +26,7 @@ AI-powered cold email generator that analyzes a target company's website and cra
 | Styling | Tailwind CSS 4 + shadcn/ui |
 | Auth | Auth.js v5 (next-auth beta) + Google OAuth |
 | Database | PostgreSQL (Neon) + Prisma ORM |
-| AI | OpenAI GPT-4o |
+| AI | OpenAI GPT-4o-mini |
 | Scraping | Cheerio (server-side HTML parsing) |
 | Payments | Lemon Squeezy (subscription webhooks) |
 | Deployment | Vercel (serverless) |
@@ -85,7 +85,7 @@ UsageLog (rate limiting by userId or IP + date)
 
 1. User pastes a target company URL + describes their product
 2. Server scrapes the target website (main page + /about)
-3. Scraped content + product description → GPT-4o with engineered prompt
+3. Scraped content + product description → GPT-4o-mini with engineered prompt
 4. AI generates 3 emails with different angles:
    - **Observation** — References a specific feature from their site
    - **Proof** — Leads with sender's credibility, connects to target's pain point
