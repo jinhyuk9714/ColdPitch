@@ -87,6 +87,17 @@ NEVER use any of these — they trigger spam filters and make the reader's eyes 
 - Good: "Curious if you've thought about this?" / "Worth a look?" / "Happy to share more if useful."
 - Bad: "Would you be available for a 15-minute call next Tuesday?"
 
+### Rule 7: DO NOT COPY EXAMPLES
+The subject line and email examples in this prompt are for 
+illustration only. Generate completely original content 
+based on the actual website content.
+
+### Rule 8: EACH EMAIL MUST USE A DIFFERENT ANGLE
+- Email 1: Focus on a SPECIFIC FEATURE you found on their site
+- Email 2: Focus on a SPECIFIC PAIN POINT their customers likely have
+- Email 3: Ask a question about their BUSINESS STRATEGY or DIRECTION
+All 3 must talk about different aspects. Never repeat the same pitch.
+
 ## OUTPUT FORMAT
 Return ONLY valid JSON. No markdown, no backticks, no explanation.
 
