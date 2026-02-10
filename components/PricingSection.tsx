@@ -35,8 +35,11 @@ const proPlan = {
 export default function PricingSection() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  const isPro = session?.user?.tier === "pro";
 
   async function handleProClick() {
+    if (isPro) return;
+
     if (!session?.user) {
       signIn("google");
       return;
@@ -132,14 +135,20 @@ export default function PricingSection() {
             </ul>
             <button
               onClick={handleProClick}
-              disabled={loading}
-              className="mt-8 block w-full rounded-lg bg-primary py-2.5 text-center text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              disabled={loading || isPro}
+              className={`mt-8 block w-full rounded-lg py-2.5 text-center text-sm font-medium transition-colors disabled:opacity-60 ${
+                isPro
+                  ? "bg-secondary text-secondary-foreground"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+              }`}
             >
               {loading
                 ? "Redirecting..."
-                : session?.user
-                  ? "Upgrade to Pro"
-                  : "Sign in to Upgrade"}
+                : isPro
+                  ? "Current Plan"
+                  : session?.user
+                    ? "Upgrade to Pro"
+                    : "Sign in to Upgrade"}
             </button>
           </div>
         </div>

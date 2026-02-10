@@ -12,9 +12,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
+
+        const subscription = await prisma.subscription.findUnique({
+          where: { userId: user.id },
+          select: { status: true, currentPeriodEnd: true },
+        });
+
+        session.user.tier =
+          subscription?.status === "active" &&
+          subscription.currentPeriodEnd &&
+          subscription.currentPeriodEnd > new Date()
+            ? "pro"
+            : "free";
       }
       return session;
     },
