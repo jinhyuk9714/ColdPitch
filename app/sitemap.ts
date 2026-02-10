@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = "https://coldpitch-tau.vercel.app";
+  const siteUrl = "https://coldpitch.site";
 
   return [
     {

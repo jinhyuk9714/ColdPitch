@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/dashboard/"],
       },
     ],
-    sitemap: "https://coldpitch-tau.vercel.app/sitemap.xml",
+    sitemap: "https://coldpitch.site/sitemap.xml",
   };
 }

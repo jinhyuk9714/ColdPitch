@@ -77,7 +77,7 @@ export default function OGImage() {
             textAlign: "center",
           }}
         >
-          coldpitch-tau.vercel.app
+          coldpitch.site
         </div>
       </div>
     ),

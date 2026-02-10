@@ -8,7 +8,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://coldpitch-tau.vercel.app";
+const siteUrl = "https://coldpitch.site";
 
 export const metadata: Metadata = {
   title: "ColdPitch — AI Cold Email Generator",
