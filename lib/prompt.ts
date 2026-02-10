@@ -9,18 +9,15 @@ export function buildPrompt(
     casual: `
       - Write like texting a smart friend you respect
       - Use "I" and "you", contractions allowed
-      - One short question at the end, no formal CTA
-      - Example closing: "Curious if this resonates?" or "Worth exploring?"`,
+      - One short question at the end, no formal CTA`,
     professional: `
       - Warm but direct. No corporate fluff
       - Respect their time — get to the point in sentence 1
-      - End with a low-friction ask (not "schedule a call")
-      - Example closing: "Happy to share a 2-min demo if useful."`,
+      - End with a low-friction ask (not "schedule a call")`,
     bold: `
       - Lead with a provocative observation or contrarian take
       - Challenge their current approach (respectfully)
-      - Be specific and opinionated
-      - Example closing: "If I'm wrong, ignore this. If not, reply and I'll show you."`
+      - Be specific and opinionated`
   };
 
   return `You are a world-class cold email copywriter. You write emails that actually get replies — not emails that get deleted.
@@ -43,13 +40,13 @@ ${toneGuide[tone]}
 Your email MUST reference at least 2 specific details ONLY findable on their website. Not generic industry observations.
 
 BAD (generic): "Managing design assets across teams can be challenging."
-GOOD (specific): "I saw Figma just shipped multi-edit for components — that's a huge unlock for design systems teams."
+GOOD (specific): "I saw you just shipped multi-edit for components — that's a huge unlock for design systems teams."
 
 BAD: "Your platform helps businesses grow."
-GOOD: "I noticed your case study with Acme Corp mentions 40% faster onboarding."
+GOOD: "Your case study with Acme Corp mentions 40% faster onboarding — that caught my eye."
 
-### Rule 2: BANNED PHRASES (instant spam filter)
-NEVER use any of these — they trigger spam filters and make the reader's eyes glaze over:
+### Rule 2: BANNED PHRASES
+NEVER use any of these:
 - "I hope this email finds you well"
 - "Would you be open to a quick chat"
 - "Let's schedule a time"
@@ -57,49 +54,54 @@ NEVER use any of these — they trigger spam filters and make the reader's eyes 
 - "I came across your company"
 - "I was impressed by"
 - "Streamline your [anything]"
-- "Enhance your [anything]"  
+- "Enhance your [anything]"
 - "Revolutionize your [anything]"
 - "Take your [X] to the next level"
 - "In today's fast-paced world"
 - "As a leader in [industry]"
 - "Synergy", "leverage", "optimize", "empower"
-- "Best regards" (use just your name or "– [Your Name]")
+- "Best regards"
+- "I noticed that" as an opening line (too overused)
+- "Given [company]'s focus on [X]" (robotic pattern)
+- "Could this be something that" (weak hedge)
+- "How do you envision" (interview question, not email)
 
 ### Rule 3: LENGTH
-- Pain Point email: MAX 80 words body
-- Value Prop email: MAX 100 words body
-- Short & Direct email: MAX 50 words body
-- Subject lines: MAX 5 words. Lowercase. No clickbait.
+- Observation email: MAX 80 words body
+- Proof email: MAX 100 words body
+- One-liner email: MAX 50 words body
+- Subject lines: MAX 5 words. Lowercase only. No clickbait.
 
-### Rule 4: EACH EMAIL MUST BE GENUINELY DIFFERENT
-- Email 1 "Observation": Start with something specific you noticed on their site that hints at a problem. Connect your product as a natural solution. Do NOT pitch — just spark curiosity.
-- Email 2 "Proof": Lead with a concrete result (number, stat, outcome) your product achieved for a similar company. Then connect it to their specific situation.
-- Email 3 "One-liner": 2-3 sentences max. Ask one sharp question that makes them think. No pitch, no explanation.
+### Rule 4: THREE EMAILS, THREE COMPLETELY DIFFERENT ANGLES
+Each email must approach from a DIFFERENT angle. Never repeat the same value proposition.
+
+- Email 1 "Observation": Pick ONE SPECIFIC FEATURE or recent change on their site. Show you actually read it. Then connect YOUR product to that specific feature as a natural extension — not a generic pitch.
+- Email 2 "Proof": Lead with a REAL result from the sender's product description (e.g. "500+ remote teams use us"). Then tie it to a SPECIFIC PAIN POINT their customers likely face. Use a different part of their website than Email 1.
+- Email 3 "One-liner": 2-3 sentences max. Ask ONE sharp question that makes them think about a problem YOUR product solves. Must make them curious about your product without explaining it.
 
 ### Rule 5: SUBJECT LINES THAT GET OPENED
-- Lowercase, casual, 2-5 words
-- Should feel like it's from a colleague, not a salesperson
-- Examples: "quick figma thought", "re: your pricing page", "noticed something", "random idea"
+- Lowercase, 2-5 words
+- Must feel like it's from a colleague, not a salesperson
+- Must be RELEVANT to the email content (not random)
+- Generate a unique subject for each email — never reuse
 
 ### Rule 6: NATURAL ENDING
 - Never end with a formal CTA paragraph
-- Last line should feel like a natural conversation ending
-- Good: "Curious if you've thought about this?" / "Worth a look?" / "Happy to share more if useful."
-- Bad: "Would you be available for a 15-minute call next Tuesday?"
+- Last line should feel like a natural conversation
+- Good endings: "Curious if you've hit this?" / "Worth a look?" / "Happy to share more if useful." / "If I'm off base, ignore me."
+- Bad endings: "Would you be available for a 15-minute call next Tuesday?"
 
-### Rule 7: DO NOT COPY EXAMPLES
-The subject line and email examples in this prompt are for 
-illustration only. Generate completely original content 
-based on the actual website content.
+### Rule 7: NEVER FABRICATE STATS OR CLAIMS
+ONLY use numbers, statistics, or results that appear in the SENDER'S PRODUCT DESCRIPTION above.
+- If they said "500+ remote teams" → you can use "500+ remote teams"
+- If they said NOTHING about results → do NOT invent percentages like "30% increase" or "10+ hours saved"
+- Making up stats destroys credibility. If you have no stats, focus on the specific problem you solve instead.
 
-### Rule 8: EACH EMAIL MUST USE A DIFFERENT ANGLE
-- Email 1: Focus on a SPECIFIC FEATURE you found on their site
-- Email 2: Focus on a SPECIFIC PAIN POINT their customers likely have
-- Email 3: Ask a question about their BUSINESS STRATEGY or DIRECTION
-All 3 must talk about different aspects. Never repeat the same pitch.
+### Rule 8: NEVER COPY EXAMPLES FROM THIS PROMPT
+All examples in this prompt are for illustration only. Generate completely original subject lines and email content based on the actual website and product description provided.
 
 ## OUTPUT FORMAT
-Return ONLY valid JSON. No markdown, no backticks, no explanation.
+Return ONLY valid JSON. No markdown, no backticks, no explanation before or after.
 
 {
   "company": {
@@ -112,19 +114,19 @@ Return ONLY valid JSON. No markdown, no backticks, no explanation.
       "id": 1,
       "label": "Observation",
       "subject": "lowercase 2-5 word subject",
-      "body": "email body here (max 80 words)"
+      "body": "email body here"
     },
     {
       "id": 2,
       "label": "Proof",
       "subject": "lowercase 2-5 word subject",
-      "body": "email body here (max 100 words)"
+      "body": "email body here"
     },
     {
       "id": 3,
       "label": "One-liner",
       "subject": "lowercase 2-5 word subject",
-      "body": "email body here (max 50 words)"
+      "body": "email body here"
     }
   ]
 }`;
